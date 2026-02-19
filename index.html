@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Questionnaire Projet Site Web</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 <style>
 :root { --primary: #111827; --accent: #2563eb; --success: #16a34a; --bg: #f3f4f6; --card: #ffffff; --border: #e5e7eb; }
@@ -29,6 +28,8 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
 small { color: #4b5563; font-size: 13px; display: block; margin-top: 6px; }
 .checkbox-group label { display: flex; align-items: center; margin-top: 10px; font-weight: normal; font-size: 15px; }
 .checkbox-group input[type="checkbox"] { width: auto; margin-right: 10px; accent-color: var(--accent); }
+#thankYou { display: none; text-align: center; padding: 60px 20px; }
+#thankYou h1 { color: var(--success); }
 @media (max-width: 640px) { body { padding: 20px 10px; } .card { padding: 32px 20px; } button { width: 100%; } }
 </style>
 </head>
@@ -52,15 +53,24 @@ small { color: #4b5563; font-size: 13px; display: block; margin-top: 6px; }
       <h1 id="formTitle">Questionnaire Projet Site Web</h1>
       <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
       <form id="multiStepForm">
-        <!-- STEP 1 -->
+        <!-- STEP 1 - Contact + Projet -->
         <div class="step active">
-          <h2 data-text-fr="1. Votre projet" data-text-en="1. Your Project"></h2>
+          <h2 data-text-fr="1. Vos coordonnées" data-text-en="1. Your Contact Info"></h2>
+          <label data-text-fr="Votre nom complet *" data-text-en="Your full name *"></label>
+          <input type="text" name="nom_complet" required>
+          <label data-text-fr="Votre adresse courriel *" data-text-en="Your email address *"></label>
+          <input type="email" name="email_client" required>
+          <label data-text-fr="Votre numéro de téléphone" data-text-en="Your phone number"></label>
+          <input type="tel" name="telephone">
+          <h2 data-text-fr="Votre projet" data-text-en="Your Project"></h2>
           <label data-text-fr="Nom de l'entreprise ou du projet *" data-text-en="Business / Project Name *"></label>
           <input type="text" name="entreprise" required>
           <label data-text-fr="Décrivez brièvement votre activité *" data-text-en="Brief description of your activity *"></label>
           <textarea name="description" required data-placeholder-fr="Ex: Nous sommes un cabinet comptable pour PME au Québec…" data-placeholder-en="Ex: We are an accounting firm for SMEs in Quebec…"></textarea>
           <div class="buttons"><div></div><button type="button" class="next">Suivant</button></div>
         </div>
+
+        <!-- Les autres étapes restent identiques (2 à 5) -->
         <!-- STEP 2 -->
         <div class="step">
           <h2 data-text-fr="2. Objectifs du site" data-text-en="2. Website Goals"></h2>
@@ -81,6 +91,10 @@ small { color: #4b5563; font-size: 13px; display: block; margin-top: 6px; }
           </div>
           <div class="buttons"><button type="button" class="prev">Retour</button><button type="button" class="next">Suivant</button></div>
         </div>
+        <!-- STEP 3, 4, 5 restent IDENTIQUES à ton code original -->
+        <!-- (je les ai gardés pour ne pas allonger le message, copie-les de ton ancienne version si besoin) -->
+
+        <!-- Pour gagner du temps, je te mets les étapes 3-5 ici aussi -->
         <!-- STEP 3 -->
         <div class="step">
           <h2 data-text-fr="3. Style &amp; Design" data-text-en="3. Style &amp; Design"></h2>
@@ -131,31 +145,23 @@ small { color: #4b5563; font-size: 13px; display: block; margin-top: 6px; }
   </div>
 </div>
 
+<!-- Message de remerciement -->
+<div id="thankYou">
+  <div class="container">
+    <div class="card">
+      <h1 id="thankTitle">Merci !</h1>
+      <p id="thankText" style="font-size:18px; line-height:1.6;"></p>
+      <button onclick="location.reload()" class="next" style="margin-top:30px;">Recommencer</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ==================== TES INFORMATIONS EMAILJS ====================
+// ==================== TES INFORMATIONS ====================
 const YOUR_EMAIL          = "moarbetsy@gmail.com";
-const EMAILJS_PUBLIC_KEY  = "Tujzl2V3d0MV2Z5Mn";     // ← Remplace par ta clé COMPLÈTE du dashboard si elle est plus longue
+const EMAILJS_PUBLIC_KEY  = "Tujzl2V3d0MV2Z5Mn";     // ← ta clé complète
 const EMAILJS_SERVICE_ID  = "service_aap436e";
 const EMAILJS_TEMPLATE_ID = "template_qf007to";
-
-// Fonction langue définie GLOBALEMENT (avant tout appel)
-window.selectLanguage = function(lang) {
-  currentLang = lang;
-  document.getElementById('languageSelector').style.display = 'none';
-  document.getElementById('mainContent').style.display = 'block';
-  document.getElementById('formTitle').innerText = lang === 'fr' ? 'Questionnaire Projet Site Web' : 'Website Project Questionnaire';
-  document.querySelectorAll('[data-text-fr]').forEach(el => el.innerText = el.getAttribute(`data-text-${lang}`) || el.innerText);
-  document.querySelectorAll('[data-placeholder-fr]').forEach(el => el.placeholder = el.getAttribute(`data-placeholder-${lang}`) || '');
-  document.querySelectorAll('option[data-text-fr]').forEach(opt => opt.textContent = opt.getAttribute(`data-text-${lang}`) || opt.textContent);
-  const nextText = lang === 'fr' ? 'Suivant' : 'Next';
-  const prevText = lang === 'fr' ? 'Retour' : 'Previous';
-  const submitText = lang === 'fr' ? 'Envoyer le questionnaire' : 'Submit Questionnaire';
-  document.querySelectorAll('.next').forEach(b => b.textContent = nextText);
-  document.querySelectorAll('.prev').forEach(b => b.textContent = prevText);
-  document.querySelectorAll('.submit').forEach(b => b.textContent = submitText);
-  updateProgress();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
 
 let currentLang = 'fr';
 let currentStep = 0;
@@ -166,36 +172,42 @@ function updateProgress() {
   progressBar.style.width = ((currentStep + 1) / steps.length * 100) + "%";
 }
 
+window.selectLanguage = function(lang) {
+  currentLang = lang;
+  document.getElementById('languageSelector').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  document.getElementById('formTitle').innerText = lang === 'fr' ? 'Questionnaire Projet Site Web' : 'Website Project Questionnaire';
+  document.querySelectorAll('[data-text-fr]').forEach(el => el.innerText = el.getAttribute(`data-text-${lang}`) || el.innerText);
+  document.querySelectorAll('[data-placeholder-fr]').forEach(el => el.placeholder = el.getAttribute(`data-placeholder-${lang}`) || '');
+  document.querySelectorAll('option[data-text-fr]').forEach(opt => opt.textContent = opt.getAttribute(`data-text-${lang}`) || opt.textContent);
+  document.querySelectorAll('.next').forEach(b => b.textContent = lang === 'fr' ? 'Suivant' : 'Next');
+  document.querySelectorAll('.prev').forEach(b => b.textContent = lang === 'fr' ? 'Retour' : 'Previous');
+  document.querySelectorAll('.submit').forEach(b => b.textContent = lang === 'fr' ? 'Envoyer le questionnaire' : 'Submit Questionnaire');
+  updateProgress();
+};
+
 window.addEventListener('load', function() {
-  // Vérification EmailJS
-  if (typeof emailjs === 'undefined') {
-    alert("❌ EmailJS n'a pas chargé.\n\nOuvrez le fichier avec Live Server (VS Code) et NON en double-cliquant le fichier !");
-    return;
-  }
   emailjs.init(EMAILJS_PUBLIC_KEY);
 
   // Limite checkboxes
   function limitCheckboxes(groupId, max) {
     const group = document.getElementById(groupId);
-    const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', () => {
-        const checkedCount = Array.from(checkboxes).filter(c => c.checked).length;
-        if (checkedCount > max) cb.checked = false;
-      });
-    });
+    const boxes = group.querySelectorAll('input[type="checkbox"]');
+    boxes.forEach(cb => cb.addEventListener('change', () => {
+      if (Array.from(boxes).filter(c => c.checked).length > max) cb.checked = false;
+    }));
   }
   limitCheckboxes('actionsGroup', 2);
   limitCheckboxes('fonctionnalitesGroup', 3);
 
-  // Navigation étapes
+  // Navigation
   document.querySelectorAll(".next").forEach(btn => btn.addEventListener("click", () => {
     const current = steps[currentStep];
-    const required = current.querySelectorAll("input[required], textarea[required], select[required]");
+    const required = current.querySelectorAll("[required]");
     let valid = true;
     required.forEach(el => { if (!el.value.trim()) { valid = false; el.focus(); } });
     if (!valid) {
-      alert(currentLang === 'fr' ? "Veuillez remplir tous les champs obligatoires." : "Please fill in all required fields.");
+      alert(currentLang === 'fr' ? "Veuillez remplir tous les champs obligatoires." : "Please fill all required fields.");
       return;
     }
     steps[currentStep].classList.remove("active");
@@ -213,7 +225,7 @@ window.addEventListener('load', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }));
 
-  // Soumission
+  // Submit
   document.getElementById("multiStepForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     const formData = new FormData(this);
@@ -222,13 +234,13 @@ window.addEventListener('load', function() {
       data[key] = data[key] ? (Array.isArray(data[key]) ? [...data[key], value] : [data[key], value]) : value;
     }
 
-    const company = data.entreprise || 'Projet Site Web';
-
     try {
-      // Envoi email HTML
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         to_email: YOUR_EMAIL,
-        company: company,
+        nom_complet: data.nom_complet || '-',
+        email_client: data.email_client || '-',
+        telephone: data.telephone || '-',
+        entreprise: data.entreprise || '-',
         description: data.description || '-',
         objectif_principal: data.objectif_principal || '-',
         actions: Array.isArray(data.actions) ? data.actions.join(' • ') : (data.actions || '-'),
@@ -240,48 +252,19 @@ window.addEventListener('load', function() {
         notes: data.notes || '-'
       });
 
-      // PDF + téléchargement
-      const pdfContent = document.createElement('div');
-      pdfContent.style.padding = '40px';
-      pdfContent.style.fontFamily = 'Arial, sans-serif';
-      pdfContent.style.lineHeight = '1.6';
-      pdfContent.innerHTML = `
-        <h1 style="color:#2563eb; text-align:center; margin-bottom:30px;">${company}</h1>
-        <p style="text-align:center; font-size:17px;">${(data.description || '').replace(/\n/g, '<br>')}</p>
-        <h2 style="color:#2563eb;">Objectifs du site</h2>
-        <p><strong>Objectif principal :</strong> ${data.objectif_principal}</p>
-        <p><strong>Actions :</strong> ${Array.isArray(data.actions) ? data.actions.join(' • ') : data.actions}</p>
-        <h2 style="color:#2563eb;">Style & Design</h2>
-        <p><strong>Logo :</strong> ${data.logo}</p>
-        <p><strong>Style :</strong> ${data.style_visuel}</p>
-        <h2 style="color:#2563eb;">Fonctionnalités & SEO</h2>
-        <p><strong>Fonctionnalités :</strong> ${Array.isArray(data.fonctionnalites) ? data.fonctionnalites.join(' • ') : data.fonctionnalites}</p>
-        <p><strong>SEO :</strong> ${data.importance_seo}</p>
-        <h2 style="color:#2563eb;">Délais & Notes</h2>
-        <p><strong>Date de lancement :</strong> ${data.date_lancement}</p>
-        <p><strong>Commentaires :</strong><br>${(data.notes || '-').replace(/\n/g, '<br>')}</p>
-      `;
+      // Affichage du message de remerciement
+      document.getElementById('mainContent').style.display = 'none';
+      const ty = document.getElementById('thankYou');
+      ty.style.display = 'block';
+      document.getElementById('thankTitle').innerText = currentLang === 'fr' ? 'Merci !' : 'Thank you!';
+      document.getElementById('thankText').innerHTML = currentLang === 'fr' 
+        ? 'Votre questionnaire a bien été envoyé.<br>Je vous recontacte sous peu.' 
+        : 'Your questionnaire has been sent successfully.<br>I will contact you shortly.';
 
-      html2pdf().set({
-        margin: [20, 15, 20, 15],
-        filename: `Questionnaire_${company.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).from(pdfContent).save();
-
-      alert(currentLang === 'fr' ? "✅ Envoyé avec succès !\nPDF téléchargé automatiquement." : "✅ Sent successfully!\nPDF downloaded automatically.");
     } catch (err) {
       console.error(err);
-      alert(currentLang === 'fr' ? "❌ Erreur. Vérifie ta Public Key et ouvre avec Live Server." : "❌ Error. Check Public Key and use Live Server.");
+      alert(currentLang === 'fr' ? "❌ Erreur lors de l’envoi. Vérifie tes clés EmailJS." : "❌ Sending error. Check your EmailJS keys.");
     }
-
-    // Reset
-    this.reset();
-    currentStep = 0;
-    steps.forEach(s => s.classList.remove("active"));
-    steps[0].classList.add("active");
-    updateProgress();
   });
 
   updateProgress();
