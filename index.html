@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Questionnaire Projet Site Web</title>
-<!-- jsPDF + html2pdf pour générer un PDF propre -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 :root {
@@ -14,7 +13,6 @@
   --bg: #f3f4f6;
   --card: #ffffff;
   --border: #e5e7eb;
-  --text-muted: #4b5563;
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -43,7 +41,6 @@ input, textarea, select {
   border: 1px solid var(--border);
   font-size: 15px;
   box-sizing: border-box;
-  transition: border-color 0.2s, box-shadow 0.2s;
 }
 input:focus, textarea:focus, select:focus {
   outline: none;
@@ -51,11 +48,7 @@ input:focus, textarea:focus, select:focus {
   box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
 }
 textarea { min-height: 80px; resize: vertical; }
-.buttons {
-  margin-top: 40px;
-  display: flex;
-  justify-content: space-between;
-}
+.buttons { margin-top: 40px; display: flex; justify-content: space-between; }
 button {
   padding: 13px 24px;
   border-radius: 10px;
@@ -63,53 +56,22 @@ button {
   cursor: pointer;
   font-weight: 600;
   font-size: 15px;
-  transition: opacity 0.2s, transform 0.1s;
+  transition: all 0.2s;
 }
-button:active { transform: translateY(1px); }
 .next { background: var(--accent); color: white; }
 .prev { background: #e5e7eb; color: var(--primary); }
 .submit { background: var(--success); color: white; }
-button:hover { opacity: 0.9; }
-.progress {
-  height: 8px;
-  background: var(--border);
-  border-radius: 10px;
-  margin-bottom: 32px;
-  overflow: hidden;
-}
-.progress-bar {
-  height: 100%;
-  background: var(--accent);
-  width: 0%;
-  transition: width 0.4s ease;
-}
-small {
-  color: var(--text-muted);
-  font-size: 13px;
-  display: block;
-  margin-top: 6px;
-}
+button:hover { opacity: 0.9; transform: translateY(-1px); }
+.progress { height: 8px; background: var(--border); border-radius: 10px; margin-bottom: 32px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; }
+small { color: #4b5563; font-size: 13px; display: block; margin-top: 6px; }
 .checkbox-group { margin-top: 12px; }
-.checkbox-group label {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  font-weight: normal;
-  font-size: 15px;
-}
-.checkbox-group input[type="checkbox"] {
-  width: auto;
-  margin-right: 10px;
-  accent-color: var(--accent);
-}
+.checkbox-group label { display: flex; align-items: center; margin-top: 10px; font-weight: normal; font-size: 15px; }
+.checkbox-group input[type="checkbox"] { width: auto; margin-right: 10px; accent-color: var(--accent); }
 @media (max-width: 640px) {
   body { padding: 20px 10px; }
   .card { padding: 32px 20px; }
-  h1 { font-size: 24px; }
-  h2 { font-size: 18px; }
-  input, textarea, select { font-size: 16px; padding: 14px; }
-  .buttons { flex-direction: column; gap: 16px; }
-  button { width: 100%; padding: 16px; font-size: 16px; }
+  button { width: 100%; padding: 16px; }
 }
 </style>
 </head>
@@ -119,7 +81,7 @@ small {
   <div class="container">
     <div class="card">
       <h1>Choisissez votre langue<br><span style="font-size:18px; font-weight:normal;">Choose your language</span></h1>
-      <div style="margin-top: 60px; display: flex; flex-direction: column; gap: 20px; align-items: center;">
+      <div style="margin-top:60px; display:flex; flex-direction:column; gap:20px; align-items:center;">
         <button type="button" class="next" onclick="selectLanguage('fr')" style="width:100%; max-width:300px; padding:16px; font-size:18px;">Français</button>
         <button type="button" class="next" onclick="selectLanguage('en')" style="width:100%; max-width:300px; padding:16px; font-size:18px;">English</button>
       </div>
@@ -131,12 +93,9 @@ small {
   <div class="container">
     <div class="card">
       <h1 id="formTitle">Questionnaire Projet Site Web</h1>
-      <div class="progress">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
+      <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
 
       <form id="multiStepForm">
-
         <!-- STEP 1 -->
         <div class="step active">
           <h2 data-text-fr="1. Votre projet" data-text-en="1. Your Project"></h2>
@@ -144,10 +103,7 @@ small {
           <input type="text" name="entreprise" required>
           <label data-text-fr="Décrivez brièvement votre activité *" data-text-en="Brief description of your activity *"></label>
           <textarea name="description" required data-placeholder-fr="Ex: Nous sommes un cabinet comptable pour PME au Québec…" data-placeholder-en="Ex: We are an accounting firm for SMEs in Quebec…"></textarea>
-          <div class="buttons">
-            <div></div>
-            <button type="button" class="next">Suivant</button>
-          </div>
+          <div class="buttons"><div></div><button type="button" class="next">Suivant</button></div>
         </div>
 
         <!-- STEP 2 -->
@@ -168,20 +124,14 @@ small {
             <label><input type="checkbox" name="actions" value="acheter"> Acheter</label>
             <label><input type="checkbox" name="actions" value="lire"> Lire des infos</label>
           </div>
-          <div class="buttons">
-            <button type="button" class="prev">Retour</button>
-            <button type="button" class="next">Suivant</button>
-          </div>
+          <div class="buttons"><button type="button" class="prev">Retour</button><button type="button" class="next">Suivant</button></div>
         </div>
 
         <!-- STEP 3 -->
         <div class="step">
           <h2 data-text-fr="3. Style &amp; Design" data-text-en="3. Style &amp; Design"></h2>
           <label data-text-fr="Avez-vous un logo ?" data-text-en="Do you have a logo?"></label>
-          <select name="logo">
-            <option value="oui">Oui</option>
-            <option value="non">Non</option>
-          </select>
+          <select name="logo"><option value="oui">Oui</option><option value="non">Non</option></select>
           <label data-text-fr="Style souhaité *" data-text-en="Desired style *"></label>
           <select name="style_visuel" required>
             <option value="" data-text-fr="Sélectionnez" data-text-en="Select"></option>
@@ -190,10 +140,7 @@ small {
             <option value="creatif">Créatif / coloré</option>
             <option value="luxe">Luxe / élégant</option>
           </select>
-          <div class="buttons">
-            <button type="button" class="prev">Retour</button>
-            <button type="button" class="next">Suivant</button>
-          </div>
+          <div class="buttons"><button type="button" class="prev">Retour</button><button type="button" class="next">Suivant</button></div>
         </div>
 
         <!-- STEP 4 -->
@@ -214,10 +161,7 @@ small {
             <option value="moyenne">Important</option>
             <option value="basse">Pas prioritaire pour l’instant</option>
           </select>
-          <div class="buttons">
-            <button type="button" class="prev">Retour</button>
-            <button type="button" class="next">Suivant</button>
-          </div>
+          <div class="buttons"><button type="button" class="prev">Retour</button><button type="button" class="next">Suivant</button></div>
         </div>
 
         <!-- STEP 5 -->
@@ -227,13 +171,9 @@ small {
           <input type="date" name="date_lancement" required>
           <small data-text-fr="Cliquez pour ouvrir le calendrier" data-text-en="Click to open calendar"></small>
           <label data-text-fr="Commentaires ou besoins supplémentaires" data-text-en="Any additional comments"></label>
-          <textarea name="notes" data-placeholder-fr="Ex: Je veux un site très simple et rapide à mettre en ligne…" data-placeholder-en="Ex: I want a very simple and fast website…"></textarea>
-          <div class="buttons">
-            <button type="button" class="prev">Retour</button>
-            <button type="submit" class="submit">Envoyer le questionnaire</button>
-          </div>
+          <textarea name="notes" data-placeholder-fr="Ex: Je veux un site très simple et rapide…" data-placeholder-en="Ex: I want a very simple and fast website…"></textarea>
+          <div class="buttons"><button type="button" class="prev">Retour</button><button type="submit" class="submit">Envoyer le questionnaire</button></div>
         </div>
-
       </form>
     </div>
   </div>
@@ -242,43 +182,23 @@ small {
 <script>
 let currentLang = '';
 const messages = {
-  fr: {
-    required: "Veuillez remplir tous les champs obligatoires.",
-    success: "✅ Questionnaire envoyé ! Le PDF a été généré et téléchargé automatiquement.",
-    error: "❌ Une erreur est survenue.",
-    connection: "❌ Erreur de connexion (données dans la console)."
-  },
-  en: {
-    required: "Please fill in all required fields.",
-    success: "✅ Questionnaire sent! The PDF has been generated and downloaded automatically.",
-    error: "❌ An error occurred.",
-    connection: "❌ Connection error (data in console)."
-  }
+  fr: { required: "Veuillez remplir tous les champs obligatoires.", success: "✅ Questionnaire envoyé ! Le PDF professionnel a été généré et téléchargé.", error: "❌ Une erreur est survenue.", connection: "❌ Erreur de connexion." },
+  en: { required: "Please fill in all required fields.", success: "✅ Questionnaire sent! The professional PDF has been generated and downloaded.", error: "❌ An error occurred.", connection: "❌ Connection error." }
 };
 
 function selectLanguage(lang) {
   currentLang = lang;
   document.getElementById('languageSelector').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
-
   document.getElementById('formTitle').innerText = lang === 'fr' ? 'Questionnaire Projet Site Web' : 'Website Project Questionnaire';
 
-  document.querySelectorAll('[data-text-fr]').forEach(el => {
-    el.innerText = el.getAttribute(`data-text-${lang}`) || el.innerText;
-  });
-
-  document.querySelectorAll('[data-placeholder-fr]').forEach(el => {
-    el.placeholder = el.getAttribute(`data-placeholder-${lang}`) || '';
-  });
-
-  document.querySelectorAll('option[data-text-fr]').forEach(opt => {
-    opt.textContent = opt.getAttribute(`data-text-${lang}`) || opt.textContent;
-  });
+  document.querySelectorAll('[data-text-fr]').forEach(el => el.innerText = el.getAttribute(`data-text-${lang}`) || el.innerText);
+  document.querySelectorAll('[data-placeholder-fr]').forEach(el => el.placeholder = el.getAttribute(`data-placeholder-${lang}`) || '');
+  document.querySelectorAll('option[data-text-fr]').forEach(opt => opt.textContent = opt.getAttribute(`data-text-${lang}`) || opt.textContent);
 
   const nextText = lang === 'fr' ? 'Suivant' : 'Next';
   const prevText = lang === 'fr' ? 'Retour' : 'Previous';
   const submitText = lang === 'fr' ? 'Envoyer le questionnaire' : 'Submit Questionnaire';
-
   document.querySelectorAll('.next').forEach(b => b.textContent = nextText);
   document.querySelectorAll('.prev').forEach(b => b.textContent = prevText);
   document.querySelectorAll('.submit').forEach(b => b.textContent = submitText);
@@ -294,8 +214,7 @@ const progressBar = document.getElementById("progressBar");
 let currentStep = 0;
 
 function updateProgress() {
-  const progress = ((currentStep + 1) / steps.length) * 100;
-  progressBar.style.width = progress + "%";
+  progressBar.style.width = ((currentStep + 1) / steps.length * 100) + "%";
 }
 
 function validateStep() {
@@ -311,29 +230,10 @@ function validateStep() {
   return true;
 }
 
-nextBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    if (!validateStep()) return;
-    steps[currentStep].classList.remove("active");
-    currentStep++;
-    steps[currentStep].classList.add("active");
-    updateProgress();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
+nextBtns.forEach(btn => btn.addEventListener("click", () => { if (validateStep()) { steps[currentStep].classList.remove("active"); currentStep++; steps[currentStep].classList.add("active"); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); }}));
+prevBtns.forEach(btn => btn.addEventListener("click", () => { steps[currentStep].classList.remove("active"); currentStep--; steps[currentStep].classList.add("active"); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); }));
 
-prevBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    steps[currentStep].classList.remove("active");
-    currentStep--;
-    steps[currentStep].classList.add("active");
-    updateProgress();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-
-// === GÉNÉRATION PDF PROPRE AU CLIC SUR LE BOUTON VERT ===
-document.getElementById("multiStepForm").addEventListener("submit", async function(e) {
+document.getElementById("multiStepForm").addEventListener("submit", function(e) {
   e.preventDefault();
   if (!validateStep()) return;
 
@@ -343,83 +243,84 @@ document.getElementById("multiStepForm").addEventListener("submit", async functi
     if (data[key]) {
       if (!Array.isArray(data[key])) data[key] = [data[key]];
       data[key].push(value);
-    } else {
-      data[key] = value;
-    }
+    } else data[key] = value;
   }
 
-  // === CRÉATION DU CONTENU PDF (template propre) ===
+  // === TEMPLATE PDF PROFESSIONNEL ===
   const pdfContent = document.createElement('div');
-  pdfContent.style.padding = '50px 40px';
-  pdfContent.style.fontFamily = 'Arial, sans-serif';
-  pdfContent.style.lineHeight = '1.6';
-  pdfContent.style.color = '#111827';
-  pdfContent.style.maxWidth = '800px';
-  pdfContent.style.margin = '0 auto';
+  pdfContent.style.padding = '50px 45px';
+  pdfContent.style.fontFamily = 'Arial, Helvetica, sans-serif';
+  pdfContent.style.lineHeight = '1.65';
+  pdfContent.style.color = '#1f2937';
   pdfContent.style.background = '#ffffff';
 
-  const title = currentLang === 'fr' ? 'Questionnaire Projet Site Web' : 'Website Project Questionnaire';
-  const dateStr = new Date().toLocaleDateString(currentLang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const company = data.entreprise || 'Projet Site Web';
+  const today = new Date().toLocaleDateString(currentLang === 'fr' ? 'fr-FR' : 'en-US', {year:'numeric', month:'long', day:'numeric'});
 
   pdfContent.innerHTML = `
-    <h1 style="text-align:center; color:#2563eb; margin-bottom:30px;">${title}</h1>
-    <p style="text-align:center; font-size:14px; color:#4b5563;">Soumis le ${dateStr}</p>
-    <hr style="margin:30px 0; border:none; border-top:2px solid #e5e7eb;">
-    
-    <h2 style="color:#2563eb; margin-top:40px;">1. ${currentLang === 'fr' ? 'Votre projet' : 'Your Project'}</h2>
-    <p><strong>${currentLang === 'fr' ? 'Nom de l’entreprise ou du projet' : 'Business / Project Name'} :</strong> ${data.entreprise || '-'}</p>
-    <p><strong>${currentLang === 'fr' ? 'Description' : 'Description'} :</strong><br>${(data.description || '-').replace(/\n/g, '<br>')}</p>
+    <div style="border-bottom:4px solid #2563eb; padding-bottom:20px; margin-bottom:40px;">
+      <h1 style="margin:0; font-size:28px; color:#2563eb; text-align:center;">Questionnaire Projet Site Web</h1>
+      <p style="text-align:center; margin:8px 0 0 0; color:#4b5563; font-size:15px;">Soumis le ${today}</p>
+    </div>
 
-    <h2 style="color:#2563eb; margin-top:40px;">2. ${currentLang === 'fr' ? 'Objectifs du site' : 'Website Goals'}</h2>
-    <p><strong>${currentLang === 'fr' ? 'Objectif principal' : 'Main goal'} :</strong> ${data.objectif_principal || '-'}</p>
-    <p><strong>${currentLang === 'fr' ? 'Actions des visiteurs' : 'Visitor actions'} :</strong> ${Array.isArray(data.actions) ? data.actions.join(', ') : (data.actions || '-')}</p>
+    <div style="background:#f8fafc; padding:25px; border-radius:12px; margin-bottom:40px;">
+      <h2 style="margin:0 0 8px 0; color:#1e40af; font-size:22px;">${company}</h2>
+      <p style="margin:0; color:#64748b;">Dossier client – Création de site web</p>
+    </div>
 
-    <h2 style="color:#2563eb; margin-top:40px;">3. ${currentLang === 'fr' ? 'Style & Design' : 'Style & Design'}</h2>
-    <p><strong>${currentLang === 'fr' ? 'Logo existant' : 'Existing logo'} :</strong> ${data.logo || '-'}</p>
-    <p><strong>${currentLang === 'fr' ? 'Style souhaité' : 'Desired style'} :</strong> ${data.style_visuel || '-'}</p>
+    <div style="margin-bottom:35px;">
+      <h3 style="color:#2563eb; border-left:5px solid #2563eb; padding-left:15px; margin:0 0 12px 0;">1. Votre projet</h3>
+      <p><strong>Nom :</strong> ${company}</p>
+      <p><strong>Description :</strong><br>${(data.description || '-').replace(/\n/g, '<br>')}</p>
+    </div>
 
-    <h2 style="color:#2563eb; margin-top:40px;">4. ${currentLang === 'fr' ? 'Fonctionnalités & SEO' : 'Features & SEO'}</h2>
-    <p><strong>${currentLang === 'fr' ? 'Fonctionnalités' : 'Features'} :</strong> ${Array.isArray(data.fonctionnalites) ? data.fonctionnalites.join(', ') : (data.fonctionnalites || '-')}</p>
-    <p><strong>${currentLang === 'fr' ? 'Importance du SEO' : 'SEO importance'} :</strong> ${data.importance_seo || '-'}</p>
+    <div style="margin-bottom:35px;">
+      <h3 style="color:#2563eb; border-left:5px solid #2563eb; padding-left:15px; margin:0 0 12px 0;">2. Objectifs du site</h3>
+      <p><strong>Objectif principal :</strong> ${data.objectif_principal || '-'}</p>
+      <p><strong>Actions souhaitées :</strong> ${Array.isArray(data.actions) ? data.actions.join(' • ') : (data.actions || '-')}</p>
+    </div>
 
-    <h2 style="color:#2563eb; margin-top:40px;">5. ${currentLang === 'fr' ? 'Délais & Notes' : 'Timeline & Notes'}</h2>
-    <p><strong>${currentLang === 'fr' ? 'Date de lancement souhaitée' : 'Desired launch date'} :</strong> ${data.date_lancement || '-'}</p>
-    <p><strong>${currentLang === 'fr' ? 'Commentaires supplémentaires' : 'Additional comments'} :</strong><br>${(data.notes || '-').replace(/\n/g, '<br>')}</p>
+    <div style="margin-bottom:35px;">
+      <h3 style="color:#2563eb; border-left:5px solid #2563eb; padding-left:15px; margin:0 0 12px 0;">3. Style &amp; Design</h3>
+      <p><strong>Logo existant :</strong> ${data.logo || '-'}</p>
+      <p><strong>Style souhaité :</strong> ${data.style_visuel || '-'}</p>
+    </div>
+
+    <div style="margin-bottom:35px;">
+      <h3 style="color:#2563eb; border-left:5px solid #2563eb; padding-left:15px; margin:0 0 12px 0;">4. Fonctionnalités &amp; SEO</h3>
+      <p><strong>Fonctionnalités :</strong> ${Array.isArray(data.fonctionnalites) ? data.fonctionnalites.join(' • ') : (data.fonctionnalites || '-')}</p>
+      <p><strong>Importance SEO :</strong> ${data.importance_seo || '-'}</p>
+    </div>
+
+    <div style="margin-bottom:35px;">
+      <h3 style="color:#2563eb; border-left:5px solid #2563eb; padding-left:15px; margin:0 0 12px 0;">5. Délais &amp; Notes</h3>
+      <p><strong>Date de lancement souhaitée :</strong> ${data.date_lancement || '-'}</p>
+      <p><strong>Commentaires :</strong><br>${(data.notes || '-').replace(/\n/g, '<br>')}</p>
+    </div>
+
+    <div style="margin-top:60px; padding-top:20px; border-top:2px solid #e5e7eb; text-align:center; color:#64748b; font-size:13px;">
+      Document généré automatiquement • Confidentiel
+    </div>
   `;
 
-  // Génération et téléchargement du PDF
   const opt = {
-    margin: [15, 15, 15, 15],
-    filename: `Questionnaire_${(data.entreprise || 'Projet').replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
+    margin: [20, 20, 20, 20],
+    filename: `Questionnaire_${company.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
+    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
   html2pdf().set(opt).from(pdfContent).save();
 
-  // Message de succès
   alert(messages[currentLang].success);
 
-  // Reset du formulaire
+  // Reset
   this.reset();
   currentStep = 0;
   steps.forEach(s => s.classList.remove("active"));
   steps[0].classList.add("active");
   updateProgress();
-
-  // (Optionnel : envoi serveur – décommentez si vous avez un vrai backend)
-  /*
-  try {
-    await fetch("https://votre-backend.com/submit", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ lang: currentLang, ...data })
-    });
-  } catch (err) {
-    console.log("PDF généré, mais erreur d'envoi serveur :", err);
-  }
-  */
 });
 
 updateProgress();
